@@ -1,8 +1,11 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-
+import dotenv from "dotenv";
+import {connectDB} from "./db/db.js";
 import contactsRouter from "./routes/contactsRouter.js";
+
+dotenv.config();
 
 const app = express();
 
@@ -21,6 +24,15 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-app.listen(3000, () => {
-  console.log("Server is running. Use our API on port: 3000");
+// Connect to the database first, then start the server
+const PORT = process.env.PORT || 3000;
+
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server is running on port ${PORT}`);
+  });
+}).catch((error) => {
+  console.error("❌ Failed to connect to the database:", error.message);
+  process.exit(1);
 });
+
