@@ -1,2 +1,2 @@
 # goit-node-rest-api
-HW Backend Development Course GoIT Topic 4. REST API
+HW Backend Development Course GoIT Topic 6. PostgresSQL & Sequelize
