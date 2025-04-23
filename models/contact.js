@@ -26,6 +26,14 @@ const Contact = sequelize.define("Contact", {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
     },
+    owner: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Users',
+            key: 'id',
+        },
+    },
 });
 
 export default Contact;
