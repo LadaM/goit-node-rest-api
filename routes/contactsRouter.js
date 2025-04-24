@@ -8,8 +8,11 @@ import {
   updateFavoriteStatus,
 } from "../controllers/contactsController.js";
 import {validateCreateContact, validateUpdateContact} from "../utils/validateContact.js";
+import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
+
+router.use(authMiddleware);
 
 router.get("/", getAllContacts);
 router.get("/:contactId", getContact);

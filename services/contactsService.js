@@ -1,7 +1,7 @@
 import Contact from "../models/contact.js"; // Ensure correct path to the Contact model
 
-export async function listContacts() {
-  return await Contact.findAll();
+export async function listContacts(ownerId) {
+  return await Contact.findAll({ where: { owner: ownerId } });
 }
 
 export async function getContactById(contactId) {
@@ -15,8 +15,8 @@ export async function removeContact(contactId) {
   return contact;
 }
 
-export async function addContact({ name, email, phone }) {
-  return await Contact.create({ name, email, phone });
+export async function addContact({ name, email, phone }, ownerId) {
+  return await Contact.create({ name, email, phone, owner: ownerId });
 }
 
 export async function updateContact(contactId, data) {

@@ -9,7 +9,8 @@ import {
 
 export const getAllContacts = async (req, res, next) => {
     try {
-        const contacts = await listContacts();
+        const userId = req.user.id;
+        const contacts = await listContacts(userId);
         res.json(contacts);
     } catch (error) {
         next(error);
@@ -34,7 +35,7 @@ export const createContact = async (req, res, next) => {
         if (!name || !email || !phone) {
             return res.status(400).json({message: "Missing required fields"});
         }
-        const newContact = await addContact({name, email, phone});
+        const newContact = await addContact({name, email, phone}, req.user.id);
         res.status(201).json(newContact);
     } catch (error) {
         next(error);
