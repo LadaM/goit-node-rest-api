@@ -1,27 +1,27 @@
-import {Sequelize} from "sequelize";
 import dotenv from "dotenv";
+dotenv.config(); // ✅ MUST come before using process.env.DATABASE_URL
 
-dotenv.config();
+import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
   dialectOptions: {
     ssl: {
-      require: true, // Enforces SSL
-      rejectUnauthorized: false, // Allows self-signed certificates
+      require: true,
+      rejectUnauthorized: false,
     },
   },
-  logging: false, // Disable logging for cleaner output
+  logging: false,
 });
 
 export const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log("✅ Database connection successful");
-    await sequelize.sync({ alter: true }); // Synchronize models
+    await sequelize.sync({ alter: true });
   } catch (error) {
     console.error("❌ Database connection error:", error.message);
-    process.exit(1); // Exit process on failure
+    process.exit(1);
   }
 };
 
