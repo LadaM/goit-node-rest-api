@@ -2,8 +2,12 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
-import { connectDB } from "./db/db.js";
+import {connectDB} from "./db/db.js";
 import contactsRouter from "./routes/contactsRouter.js";
+import authRouter from "./routes/authRouter.js";
+// Import models before syncing DB
+import "./models/user.js"; // defines Users
+import "./models/contact.js"; // defines Contacts (with FK to Users)
 
 // Load environment variables
 dotenv.config();
@@ -18,6 +22,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/contacts", contactsRouter);
+app.use("/api/auth", authRouter);
 
 // Not found handler
 app.use((_, res) => {
@@ -28,10 +33,6 @@ app.use((_, res) => {
 app.use((_, res) => {
   res.status(500).json({ message: "Server error" });
 });
-
-// Import models before syncing DB
-import "./models/user.js";     // defines Users
-import "./models/contact.js";  // defines Contacts (with FK to Users)
 
 // Connect DB and start server
 const PORT = process.env.PORT || 3000;
