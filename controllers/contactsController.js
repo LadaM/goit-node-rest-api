@@ -19,7 +19,8 @@ export const getAllContacts = async (req, res, next) => {
 
 export const getContact = async (req, res, next) => {
     try {
-        const contact = await getContactById(req.params.contactId);
+        const userId = req.user.id;
+        const contact = await getContactById(req.params.contactId, userId);
         if (!contact) {
             return res.status(404).json({message: "Not found"});
         }
@@ -48,7 +49,8 @@ export const updateContactById = async (req, res, next) => {
             return res.status(400).json({message: "Request body is required"});
         }
 
-        const updatedContact = await updateContact(req.params.contactId, req.body);
+        const userId = req.user.id;
+        const updatedContact = await updateContact(req.params.contactId, userId, req.body);
         if (!updatedContact) {
             return res.status(404).json({message: "Not found"});
         }
@@ -65,7 +67,8 @@ export const updateFavoriteStatus = async (req, res, next) => {
             return res.status(400).json({message: "Field 'favorite' must be a boolean"});
         }
 
-        const updatedContact = await updateStatusContact(req.params.contactId, req.body.favorite);
+        const userId = req.user.id;
+        const updatedContact = await updateStatusContact(req.params.contactId, userId, req.body.favorite);
         if (!updatedContact) {
             return res.status(404).json({message: "Not found"});
         }
@@ -78,7 +81,8 @@ export const updateFavoriteStatus = async (req, res, next) => {
 
 export const deleteContact = async (req, res, next) => {
     try {
-        const contact = await removeContact(req.params.contactId);
+        const userId = req.user.id;
+        const contact = await removeContact(req.params.contactId, userId);
         if (!contact) {
             return res.status(404).json({message: "Not found"});
         }
