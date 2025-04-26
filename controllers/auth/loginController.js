@@ -25,7 +25,7 @@ const loginController = async (req, res, next) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "24h" });
 
     user.token = token;
-    await user.save();
+    await user.save({fields: ['token']}); // force update token
 
     res.json({
       token,
