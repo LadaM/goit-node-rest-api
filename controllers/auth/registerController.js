@@ -1,11 +1,11 @@
-import bcrypt from "bcrypt";
 import Joi from "joi";
+import bcrypt from "bcrypt";
 import User from "../../models/user.js";
 import HttpError from "../../utils/HttpError.js";
 
 const registerSchema = Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().min(6).required(),
+    password: Joi.string().required(),
 });
 
 const registerController = async (req, res, next) => {
@@ -14,11 +14,17 @@ const registerController = async (req, res, next) => {
         if (error) throw HttpError(400, error.message);
 
         const {email, password} = req.body;
-        const userExists = await User.findOne({where: {email}});
-        if (userExists) throw HttpError(409, "Email in use");
+
+        const existingUser = await User.findOne({where: {email}});
+        if (existingUser) throw HttpError(409, "Email in use");
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await User.create({email, password: hashedPassword});
+
+        const newUser = await User.create({
+            email,
+            password: hashedPassword,
+            subscription: "starter", // default subscription
+        });
 
         res.status(201).json({
             user: {
@@ -27,7 +33,6 @@ const registerController = async (req, res, next) => {
             },
         });
     } catch (err) {
-        console.error("Registration error:", err);
         next(err);
     }
 };

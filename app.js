@@ -7,7 +7,8 @@ import contactsRouter from "./routes/contactsRouter.js";
 import authRouter from "./routes/authRouter.js";
 // Import models before syncing DB
 import "./models/user.js"; // defines Users
-import "./models/contact.js"; // defines Contacts (with FK to Users)
+import "./models/contact.js";
+import errorHandler from "./middlewares/errorHandler.js"; // defines Contacts (with FK to Users)
 
 // Load environment variables
 dotenv.config();
@@ -33,6 +34,9 @@ app.use((_, res) => {
 app.use((_, res) => {
   res.status(500).json({ message: "Server error" });
 });
+
+// Custom error handler formatting error response as JSON
+app.use(errorHandler);
 
 // Connect DB and start server
 const PORT = process.env.PORT || 3000;
