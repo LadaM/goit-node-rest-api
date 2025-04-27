@@ -8,7 +8,9 @@ import authRouter from "./routes/authRouter.js";
 // Import models before syncing DB
 import "./models/user.js"; // defines Users
 import "./models/contact.js";
-import errorHandler from "./middlewares/errorHandler.js"; // defines Contacts (with FK to Users)
+import errorHandler from "./middlewares/errorHandler.js";
+import path, {join} from "path";
+import {fileURLToPath} from "url";
 
 // Load environment variables
 dotenv.config();
@@ -24,6 +26,11 @@ app.use(express.json());
 // Routes
 app.use("/api/contacts", contactsRouter);
 app.use("/api/auth", authRouter);
+
+// Serve static files
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use('/avatars', express.static(join(__dirname, 'public/avatars')));
 
 // Not found handler
 app.use((_, res) => {
