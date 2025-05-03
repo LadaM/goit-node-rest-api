@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import {DataTypes} from "sequelize";
 import sequelize from "../db/db.js";
 
 const User = sequelize.define('User', {
@@ -23,6 +23,13 @@ const User = sequelize.define('User', {
       type: DataTypes.STRING,
       allowNull: true,
     },
+  verify: {
+    type: DataTypes.BOOLEAN,
+    default: false,
+  },
+  verificationToken: {
+    type: DataTypes.STRING,
+  }
 });
 
 export default User;
